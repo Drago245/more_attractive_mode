@@ -7,18 +7,18 @@
 
 import time
 
+global a
+a = 1
+
 def main():
-    
-    global a
-    a = 1
     
     from pynput import keyboard
 
-    def on_key_press(self): #this is supposed to change variable a from 1 to 2 when a key is pressed
+    def on_press(key): #this is supposed to change variable a from 1 to 2 when a key is pressed
         global a
         a = 2
 
-    def on_key_release(self): #it wouldn't let me run this without defining a release, and so 'pass' lets it run
+    def on_release(key): #it wouldn't let me run this without defining a release, and so 'pass' lets it run
         pass
 
 while True: #loops the program over and over while printing out the value of a every second
