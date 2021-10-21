@@ -14,20 +14,20 @@ def main():
     
     from pynput import keyboard
 
-    def on_key_press(self):
+    def on_key_press(self): #this is supposed to change variable a from 1 to 2 when a key is pressed
         global a
         a = 2
 
-    def on_key_release(self):
+    def on_key_release(self): #it wouldn't let me run this without defining a release, and so 'pass' lets it run
         pass
 
-while True:
+while True: #loops the program over and over while printing out the value of a every second
     main()
     print('a =',a)
     time.sleep(1)
 
 # Collect events until released
-with keyboard.Listener(
+with keyboard.Listener( #listener stuff that I copied and pasted from the example that I found from pynput
         on_press=on_press,
         on_release=on_release) as listener:
     listener.join()
