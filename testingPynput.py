@@ -1,39 +1,56 @@
-# The goal here is to understand how pynput detects inputs and figure out how I can use that to make a timer. 
-# Currently I'm trying to get it to simply change variable a from 1 to 2 when a key is pressed, and have it 
-# print that every second so that I can see it working. Once it does that properly, then I'll worry
-# about making it do something useful instead of just changing a variable
-#
-# ... but right now it doesn't work properly and I'm not sure how to make it work properly...
+# I've successfully used pynput to make a timer. Shoutout to 'reading the documentation' for getting me there. 
+# Currently this program does exactly what I want it to do, with one caveot:
+# I don't know what type of input the arcade machine controls will register as. 
+# Controls will arrive shortly. If by some miracle, pynput picks it up as a keyboard, this program will work. 
+# That's incredibly unlikely though, so I'll probably have to figure out how to use general USB activity instead
+# of keyboard input. 
 
+from pynput import keyboard
+from pynput.keyboard import Key, Controller
 import time
 
-global a
-a = 1
+virtualkeyboard = Controller()
 
-def main():
-    
-    from pynput import keyboard
+timer = 1800
+randomnumber = 3        #I know it's not random. That's over my head right now
 
-    def on_press(key): #this is supposed to change variable a from 1 to 2 when a key is pressed
-        global a
-        a = 2
+while True: #loops the whole thing
 
-    def on_release(key): #it wouldn't let me run this without defining a release, and so 'pass' lets it run
-        pass
+    if timer >= 1: #runs if the timer hasn't yet run out
 
-while True: #loops the program over and over while printing out the value of a every second
-    main()
-    print('a =',a)
-    time.sleep(1)
-
-# Collect events until released
-with keyboard.Listener( #listener stuff that I copied and pasted from the example that I found from pynput
-        on_press=on_press,
-        on_release=on_release) as listener:
-    listener.join()
-
-# ...or, in a non-blocking fashion:
-listener = keyboard.Listener(
-    on_press=on_press,
-    on_release=on_release)
-listener.start()
+        # The event listener will be running in this block
+        with keyboard.Events() as events:
+            # Block at most one second
+            event = events.get(1.0)
+            if event is None:             #if a key isn't pressed in 1 second, lower the timer by 1
+                timer = (timer - 1)
+                # print('timer is',timer)   #placeholder for me to see what's happening
+            else:
+                timer = 1800              #if a key is pressed, reset the timer
+                # print ('keypress')        # and print for me to see what's happening
+                
+    else:                                  #if the timer runs out, this runs
+        virtualkeyboard.press(Key.esc)     #exits out of game
+        virtualkeyboard.release(Key.esc)
+        time.sleep(2)
+        
+        for i in range(int(randomnumber)):  #scrolls down between 3 and 6 times
+            virtualkeyboard.press(Key.down)
+            virtualkeyboard.release(Key.down)
+            time.sleep(1)                     #waits one second between each push
+            
+        virtualkeyboard.press(Key.enter)      #presses enter to open game
+        virtualkeyboard.release(key.enter)
+        time.sleep(1)
+        
+        randomnumber = (randomnumber + 1)    #increases amount of scrolls by 1
+        
+        if randomnumber > 6:             #if scrolls exceeds 6, make it 3
+            randomnumber = 3
+            
+        else:
+            continue                 #exit if/then 
+        
+        
+        timer = 3400               #wait an hour ish before doing it again
+        continue                  # keep on looping
