@@ -1,4 +1,11 @@
 # more_attractive_mode
+
+NOTE:
+
+This has been abandoned. Unbeknownst to me, attract mode has a screensaver built in. This screensaver only plays Snap files, and doesn't open games, but it's good enough for my purpose, and so I have no reason to continue to fumble my way through this.
+
+Original:
+
 A simple Python script to make a retropie arcade automatically switch between games at a fixed interval. 
 
 Currently this is nothing. I know very little python and my goal is to learn some with this very simple project. 
